@@ -15,4 +15,9 @@ public class MyConfigurationBean {
     public MyOperation suma(){
         return new MyOperationImplement();
     }
+
+    @Bean
+    public MyBeanWithDependency print(MyOperation myOperation){
+        return new MyBeanWithDependencyImplement(myOperation);
+    }
 }

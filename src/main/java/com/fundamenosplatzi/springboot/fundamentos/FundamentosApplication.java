@@ -2,6 +2,7 @@ package com.fundamenosplatzi.springboot.fundamentos;
 
 import com.fundamenosplatzi.springboot.fundamentos.Component.ComponentDependency;
 import com.fundamenosplatzi.springboot.fundamentos.bean.MyBean;
+import com.fundamenosplatzi.springboot.fundamentos.bean.MyBeanWithDependency;
 import com.fundamenosplatzi.springboot.fundamentos.bean.MyOperation;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -13,11 +14,12 @@ public class FundamentosApplication implements CommandLineRunner {
 	private ComponentDependency componentDependency;
 	private MyBean myBean;
 	private MyOperation myOperation;
+	private MyBeanWithDependency myBeanWithDependency;
 
-	public FundamentosApplication(ComponentDependency componentDependency, MyBean myBean, MyOperation myOperation) {
+	public FundamentosApplication(ComponentDependency componentDependency, MyBean myBean, MyBeanWithDependency myBeanWithDependency) {
 		this.componentDependency = componentDependency;
 		this.myBean = myBean;
-		this.myOperation = myOperation;
+		this.myBeanWithDependency = myBeanWithDependency;
 	}
 
 	public static void main(String[] args) {
@@ -28,6 +30,7 @@ public class FundamentosApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 
 		componentDependency.saludar();
+		myBeanWithDependency.printWithDependency();
 		//myBean.print();
 	}
 }
