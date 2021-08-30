@@ -59,9 +59,16 @@ public class FundamentosApplication implements CommandLineRunner {
 		System.out.println(userRepository.findByUserEmail("insert2@insert.com"));
 
 		userRepository.findAndSort("bry", Sort.by("id").descending()).stream().forEach(user -> System.out.println("Usuario con metodo sort" + user));
+
+		userRepository.findByName("Dionne")
+        .stream()
+        .forEach(user -> System.out.println("Usuario con query method " + user));
+
+		System.out.println("Usuario encontrado con query method findByEmailAndName " + userRepository.findByEmailAndName("insert@insert.com","Walter")
+		.orElseThrow(()-> new RuntimeException("Usuario no encontrado")));
 	}
 	private void saveUsersInDataBase(){
-		User user1 = new User("Walter", "insert1@insert.com", LocalDate.of(2021, 8,28));
+		User user1 = new User("Walter", "insert@insert.com", LocalDate.of(2021, 8,28));
 		User user2 = new User("bryanseros1", "insert1@insert.com", LocalDate.of(2021, 2,28));
 		User user3 = new User("bryanseros2", "insert1@insert.com", LocalDate.of(2021, 1,28));
 		User user4 = new User("bryanseros3", "insert1@insert.com", LocalDate.of(2021, 3,28));
@@ -69,7 +76,7 @@ public class FundamentosApplication implements CommandLineRunner {
 		User user6 = new User("bryanseros5", "insert1@insert.com", LocalDate.of(2021, 5,28));
 		User user7 = new User("bryanseros6", "insert2@insert.com", LocalDate.of(2021, 6,28));
 		User user8 = new User("bryanseros7", "insert1@insert.com", LocalDate.of(2021, 7,28));
-		User user9 = new User("Dionne", "insert1@insert.com", LocalDate.of(2021, 10,28));
+		User user9 = new User("Dionne", "insert9@insert.com", LocalDate.of(2021, 10,28));
 		User user10 = new User("bryanseros9", "insert1@insert.com", LocalDate.of(2021, 9,28));
 
 		List<User> list = Arrays.asList(user1,user2,user3,user4,user5,user6,user7,user8,user9,user10);
