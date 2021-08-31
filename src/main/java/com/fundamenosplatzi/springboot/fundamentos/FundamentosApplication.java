@@ -66,6 +66,29 @@ public class FundamentosApplication implements CommandLineRunner {
 
 		System.out.println("Usuario encontrado con query method findByEmailAndName " + userRepository.findByEmailAndName("insert@insert.com","Walter")
 		.orElseThrow(()-> new RuntimeException("Usuario no encontrado")));
+
+		userRepository.findByNameLike("%b%")
+				.stream()
+				.forEach(user -> System.out.println("Usuario findByNameLike " + user));
+
+		userRepository.findByNameOrEmail("Dionne","insert3@insert.com")
+				.stream()
+				.forEach(user -> System.out.println("Usuario findByNameOrEmail " + user));
+
+		userRepository.findByBirthdayBetween(LocalDate.of(2021,04,28), LocalDate.of(2021,9,28))
+		.stream()
+		.forEach(user -> System.out.println("Usuario con intervalo de fechas " + user));
+
+		userRepository.findByNameLikeOrderByIdDesc("%bryan%")
+				.stream()
+				.forEach(user -> System.out.println("Usuario encontrado con findByNameLikeOrderByIdDesc " + user));
+
+		userRepository.findByNameContainingOrderByIdDesc("Walter")
+				.stream()
+				.forEach(user -> System.out.println("Usuario encontrado con findByNameContainingOrderByIdDesc " + user));
+
+		System.out.println( "El usuario a partir del named paramater es: " + userRepository.getAllByBirthdayAndEmail(LocalDate.of(2021, 8,28), "insert@insert.com")
+				.orElseThrow(()-> new RuntimeException("No se encontro usuario por param")));
 	}
 	private void saveUsersInDataBase(){
 		User user1 = new User("Walter", "insert@insert.com", LocalDate.of(2021, 8,28));
