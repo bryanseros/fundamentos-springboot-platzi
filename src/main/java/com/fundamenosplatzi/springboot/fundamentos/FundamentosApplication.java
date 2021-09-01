@@ -2,6 +2,7 @@ package com.fundamenosplatzi.springboot.fundamentos;
 
 import com.fundamenosplatzi.springboot.fundamentos.Component.ComponentDependency;
 import com.fundamenosplatzi.springboot.fundamentos.Repository.UserRepository;
+import com.fundamenosplatzi.springboot.fundamentos.Service.UserService;
 import com.fundamenosplatzi.springboot.fundamentos.bean.MyBean;
 import com.fundamenosplatzi.springboot.fundamentos.bean.MyBeanWithDependency;
 import com.fundamenosplatzi.springboot.fundamentos.bean.MyBeanWithProperties;
@@ -14,8 +15,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
-import java.time.Month;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,14 +28,16 @@ public class FundamentosApplication implements CommandLineRunner {
 	private MyBeanWithProperties myBeanWithProperties;
 	private UserPojo userPojo;
 	private UserRepository userRepository;
+	private UserService userService;
 
-	public FundamentosApplication(ComponentDependency componentDependency, MyBean myBean, MyBeanWithDependency myBeanWithDependency, MyBeanWithProperties myBeanWithProperties, UserPojo userPojo, UserRepository userRepository) {
+	public FundamentosApplication(ComponentDependency componentDependency, MyBean myBean, MyBeanWithDependency myBeanWithDependency, MyBeanWithProperties myBeanWithProperties, UserPojo userPojo, UserRepository userRepository, UserService userService) {
 		this.componentDependency = componentDependency;
 		this.myBean = myBean;
 		this.myBeanWithDependency = myBeanWithDependency;
 		this.myBeanWithProperties = myBeanWithProperties;
 		this.userPojo = userPojo;
 		this.userRepository = userRepository;
+		this.userService = userService;
 	}
 
 	public static void main(String[] args) {
@@ -48,6 +49,7 @@ public class FundamentosApplication implements CommandLineRunner {
 
 		saveUsersInDataBase();
 		getInformationJpqlFromUser();
+		saveWithErrorTransactional();
 		/*componentDependency.saludar();
 		myBeanWithDependency.printWithDependency();
 		System.out.println(myBeanWithProperties.function());
@@ -55,6 +57,23 @@ public class FundamentosApplication implements CommandLineRunner {
 		//myBean.print();
 	}
 
+	private void saveWithErrorTransactional(){
+		User test1 = new User("TestTransactional1","TestTransactional1@domain.com",LocalDate.now());
+		User test2 = new User("TestTransactional2","TestTransactional2@domain.com",LocalDate.now());
+		User test3 = new User("TestTransactional1","TestTransactional1@domain.com",LocalDate.now());
+		User test4 = new User("TestTransactional4","TestTransactional4@domain.com",LocalDate.now());
+
+		List<User> users = Arrays.asList(test1,test2,test3,test4);
+
+		try {
+			userService.saveTransactional(users);
+		}catch (Exception e){
+			System.out.println("Esta es una exception dentro del metodo transaccional " + e);
+		}
+
+		userService.getAllUsers().stream()
+		.forEach(user -> System.out.println("este es el usuario entro del metodo transaccional " + user));
+	}
 	private void getInformationJpqlFromUser(){
 		System.out.println(userRepository.findByUserEmail("insert2@insert.com"));
 
@@ -93,14 +112,14 @@ public class FundamentosApplication implements CommandLineRunner {
 	private void saveUsersInDataBase(){
 		User user1 = new User("Walter", "insert@insert.com", LocalDate.of(2021, 8,28));
 		User user2 = new User("bryanseros1", "insert1@insert.com", LocalDate.of(2021, 2,28));
-		User user3 = new User("bryanseros2", "insert1@insert.com", LocalDate.of(2021, 1,28));
-		User user4 = new User("bryanseros3", "insert1@insert.com", LocalDate.of(2021, 3,28));
-		User user5 = new User("bryanseros4", "insert1@insert.com", LocalDate.of(2021, 4,28));
-		User user6 = new User("bryanseros5", "insert1@insert.com", LocalDate.of(2021, 5,28));
-		User user7 = new User("bryanseros6", "insert2@insert.com", LocalDate.of(2021, 6,28));
-		User user8 = new User("bryanseros7", "insert1@insert.com", LocalDate.of(2021, 7,28));
+		User user3 = new User("bryanseros2", "insert2@insert.com", LocalDate.of(2021, 1,28));
+		User user4 = new User("bryanseros3", "insert3@insert.com", LocalDate.of(2021, 3,28));
+		User user5 = new User("bryanseros4", "insert4@insert.com", LocalDate.of(2021, 4,28));
+		User user6 = new User("bryanseros5", "insert5@insert.com", LocalDate.of(2021, 5,28));
+		User user7 = new User("bryanseros6", "insert6@insert.com", LocalDate.of(2021, 6,28));
+		User user8 = new User("bryanseros7", "insert7@insert.com", LocalDate.of(2021, 7,28));
 		User user9 = new User("Dionne", "insert9@insert.com", LocalDate.of(2021, 10,28));
-		User user10 = new User("bryanseros9", "insert1@insert.com", LocalDate.of(2021, 9,28));
+		User user10 = new User("bryanseros9", "insert8@insert.com", LocalDate.of(2021, 9,28));
 
 		List<User> list = Arrays.asList(user1,user2,user3,user4,user5,user6,user7,user8,user9,user10);
 
