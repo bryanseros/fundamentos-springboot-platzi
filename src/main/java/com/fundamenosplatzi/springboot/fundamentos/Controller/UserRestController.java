@@ -1,9 +1,12 @@
 package com.fundamenosplatzi.springboot.fundamentos.Controller;
 
 import com.fundamenosplatzi.springboot.fundamentos.CaseUse.CreateUser;
+import com.fundamenosplatzi.springboot.fundamentos.CaseUse.DeleteUser;
 import com.fundamenosplatzi.springboot.fundamentos.CaseUse.GetUser;
+import com.fundamenosplatzi.springboot.fundamentos.CaseUse.UpdateUser;
 import com.fundamenosplatzi.springboot.fundamentos.entity.User;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,10 +19,14 @@ public class UserRestController {
 
     private GetUser getUser;
     private CreateUser createUser;
+    private DeleteUser deleteUser;
+    private UpdateUser updateUser;
 
-    public UserRestController(GetUser getUser, CreateUser createUser) {
+    public UserRestController(GetUser getUser, CreateUser createUser, DeleteUser deleteUser, UpdateUser updateUser) {
         this.getUser = getUser;
         this.createUser = createUser;
+        this.deleteUser = deleteUser;
+        this.updateUser = updateUser;
     }
 
     @GetMapping("/")
@@ -27,9 +34,20 @@ public class UserRestController {
         return getUser.getAll();
     }
 
-    /*@PostMapping("/")
+    @PostMapping("/")
     ResponseEntity<User> newUser(@RequestBody User newUser){
-        return new ResponseEntity<>(createUser.save(newUser));
+        return new ResponseEntity<>(createUser.save(newUser), HttpStatus.CREATED);
 
-    }*/
+    }
+
+    @DeleteMapping("/{id}")
+    ResponseEntity deleteUser(@PathVariable Long id){
+        deleteUser.remove(id);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("/{id}")
+    ResponseEntity<User> replaceUser(@RequestBody User newUser, @PathVariable Long id){
+        return new ResponseEntity<>(updateUser.update(newUser, id), HttpStatus.OK);
+    }
 }
